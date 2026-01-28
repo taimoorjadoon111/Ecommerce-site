@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Store{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #000;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        header {
+            background-color: #000;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.7;
+        }
+        
+        .cart-badge {
+            background-color: #fff;
+            color: #000;
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            margin-left: 0.3rem;
+            font-weight: 600;
+        }
+        
+        .user-name {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+        
+        .messages {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .messages li {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            border-left: 4px solid;
+        }
+        
+        .messages .success {
+            background-color: #f0f0f0;
+            color: #000;
+            border-left-color: #000;
+        }
+        
+        .messages .error {
+            background-color: #f0f0f0;
+            color: #000;
+            border-left-color: #000;
+        }
+        
+        footer {
+            background-color: #000;
+            color: #fff;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+        
+        .footer-links {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .footer-links a:hover {
+            opacity: 0.7;
+        }
+        
+        .footer-bottom {
+            color: #888;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{% url 'store:product_list' %}" class="logo">My Store</a>
+            
+            {% if user.is_authenticated %}
+                <div class="nav-links">
+                    <a href="{% url 'store:product_list' %}">Home</a>
+                    <a href="{% url 'cart:cart_detail' %}">
+                        Cart
+                        {% if cart|length > 0 %}
+                            <span class="cart-badge">{{ cart|length }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="{% url 'orders:order_list' %}">Orders</a>
+                    <span class="user-name">{{ user.username }}</span>
+                    <a href="{% url 'accounts:logout' %}">Logout</a>
+                </div>
+            {% endif %}
+        </nav>
+    </header>
+    
+    <main>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    <footer>
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="{% url 'store:product_list' %}">Home</a>
+            <a href="{% url 'store:about' %}">About</a>
+            <a href="{% url 'store:contact' %}">Contact</a>
+            <a href="{% url 'store:privacy' %}">Privacy</a>
+            <a href="{% url 'store:terms' %}">Terms</a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 My Store. </p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

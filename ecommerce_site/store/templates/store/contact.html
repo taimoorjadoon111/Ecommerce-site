@@ -1,0 +1,61 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Contact Us - My Store{% endblock %}
+
+{% block content %}
+
+<style>
+    .page-content {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 3rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .page-content h1 {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+        color: #000;
+    }
+    
+    .page-content p {
+        margin-bottom: 1rem;
+        line-height: 1.8;
+        color: #333;
+    }
+    
+    .contact-info {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: #f9f9f9;
+        border-radius: 4px;
+    }
+    
+    .contact-info h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: #000;
+    }
+    
+    .contact-info p {
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+<div class="page-content">
+    <h1>Contact Us</h1>
+    
+    <p>We'd love to hear from you! Whether you have a question about products, orders, or anything else, our team is ready to answer all your questions.</p>
+    
+    <div class="contact-info">
+        <h2>Get in Touch</h2>
+        <p><strong>Email:</strong> support@mystore.com</p>
+        <p><strong>Phone:</strong> (123) 456-7890</p>
+        <p><strong>Address:</strong> 123 Store Street, City, State 12345</p>
+        <p><strong>Business Hours:</strong> Monday - Friday, 9:00 AM - 6:00 PM</p>
+    </div>
+</div>
+
+{% endblock %}

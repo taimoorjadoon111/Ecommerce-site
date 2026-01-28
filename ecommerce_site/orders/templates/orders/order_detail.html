@@ -1,0 +1,175 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Order #{{ order.id }} - My Store{% endblock %}
+
+{% block content %}
+
+<style>
+    .order-confirmation {
+        max-width: 800px;
+        margin: 3rem auto;
+        background: white;
+        padding: 3rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        text-align: center;
+    }
+    
+    .success-icon {
+        font-size: 5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .order-confirmation h1 {
+        font-size: 2.5rem;
+        color: #27ae60;
+        margin-bottom: 1rem;
+    }
+    
+    .order-number {
+        font-size: 1.2rem;
+        color: #7f8c8d;
+        margin-bottom: 2rem;
+    }
+    
+    .order-details {
+        text-align: left;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 2px solid #ecf0f1;
+    }
+    
+    .detail-section {
+        margin-bottom: 2rem;
+    }
+    
+    .detail-section h3 {
+        font-size: 1.3rem;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+    }
+    
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        color: #34495e;
+    }
+    
+    .order-items {
+        margin-top: 2rem;
+    }
+    
+    .order-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem;
+        background: #f8f9fa;
+        margin-bottom: 0.5rem;
+        border-radius: 8px;
+    }
+    
+    .item-name {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    .order-total {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 2px solid #ecf0f1;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #27ae60;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        justify-content: center;
+    }
+    
+    .btn {
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    .btn-secondary {
+        background: white;
+        color: #7f8c8d;
+        border: 2px solid #ecf0f1;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="order-confirmation">
+    <div class="success-icon">✅</div>
+    <h1>Order Placed Successfully!</h1>
+    <p class="order-number">Order Number: <strong>#{{ order.id }}</strong></p>
+    <p>Thank you for your purchase. We'll send you a confirmation email shortly.</p>
+    
+    <div class="order-details">
+        <div class="detail-section">
+            <h3>Shipping Information</h3>
+            <div class="detail-row">
+                <span>Name:</span>
+                <span>{{ order.first_name }} {{ order.last_name }}</span>
+            </div>
+            <div class="detail-row">
+                <span>Email:</span>
+                <span>{{ order.email }}</span>
+            </div>
+            <div class="detail-row">
+                <span>Address:</span>
+                <span>{{ order.address }}</span>
+            </div>
+            <div class="detail-row">
+                <span>City:</span>
+                <span>{{ order.city }}</span>
+            </div>
+            <div class="detail-row">
+                <span>Postal Code:</span>
+                <span>{{ order.postal_code }}</span>
+            </div>
+        </div>
+        
+        <div class="order-items">
+            <h3>Order Items</h3>
+            {% for item in order.items.all %}
+                <div class="order-item">
+                    <div>
+                        <div class="item-name">{{ item.product.name }}</div>
+                        <div>Quantity: {{ item.quantity }}</div>
+                    </div>
+                    <div>${{ item.get_cost }}</div>
+                </div>
+            {% endfor %}
+            
+            <div class="order-total">
+                <span>Total</span>
+                <span>${{ order.get_total_cost }}</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="action-buttons">
+        <a href="{% url 'store:product_list' %}" class="btn btn-primary">Continue Shopping</a>
+        <a href="{% url 'orders:order_list' %}" class="btn btn-secondary">View Orders</a>
+    </div>
+</div>
+
+{% endblock %}

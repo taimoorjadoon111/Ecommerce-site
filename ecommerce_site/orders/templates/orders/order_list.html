@@ -1,0 +1,135 @@
+{% extends 'store/base.html' %}
+
+{% block title %}My Orders - My Store{% endblock %}
+
+{% block content %}
+
+<style>
+    .orders-page {
+        max-width: 1000px;
+        margin: 2rem auto;
+    }
+    
+    .orders-page h1 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 2rem;
+    }
+    
+    .order-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        margin-bottom: 1.5rem;
+    }
+    
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #ecf0f1;
+    }
+    
+    .order-id {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    .order-date {
+        color: #7f8c8d;
+    }
+    
+    .order-items {
+        margin: 1rem 0;
+    }
+    
+    .order-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        color: #34495e;
+    }
+    
+    .order-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 2px solid #ecf0f1;
+    }
+    
+    .order-total {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #27ae60;
+    }
+    
+    .view-order-btn {
+        padding: 0.8rem 1.5rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .view-order-btn:hover {
+        transform: translateY(-2px);
+    }
+    
+    .no-orders {
+        text-align: center;
+        padding: 4rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .no-orders h2 {
+        font-size: 2rem;
+        color: #7f8c8d;
+        margin-bottom: 1rem;
+    }
+</style>
+
+<div class="orders-page">
+    <h1>My Orders</h1>
+    
+    {% if orders %}
+        {% for order in orders %}
+            <div class="order-card">
+                <div class="order-header">
+                    <div class="order-id">Order #{{ order.id }}</div>
+                    <div class="order-date">{{ order.created|date:"F d, Y" }}</div>
+                </div>
+                
+                <div class="order-items">
+                    {% for item in order.items.all %}
+                        <div class="order-item">
+                            <span>{{ item.product.name }} (x{{ item.quantity }})</span>
+                            <span>${{ item.get_cost }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="order-footer">
+                    <div class="order-total">Total: ${{ order.get_total_cost }}</div>
+                    <a href="{% url 'orders:order_detail' order.id %}" class="view-order-btn">View Details</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-orders">
+            <h2>No orders yet</h2>
+            <p>Start shopping to see your orders here!</p>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
