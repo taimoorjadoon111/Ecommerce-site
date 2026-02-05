@@ -95,15 +95,27 @@
         }
         
         .messages .success {
-            background-color: #f0f0f0;
-            color: #000;
-            border-left-color: #000;
+            background-color: #d4edda;
+            color: #155724;
+            border-left-color: #28a745;
         }
         
         .messages .error {
-            background-color: #f0f0f0;
-            color: #000;
-            border-left-color: #000;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left-color: #dc3545;
+        }
+        
+        .messages .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border-left-color: #17a2b8;
+        }
+        
+        .messages .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border-left-color: #ffc107;
         }
         
         footer {
@@ -139,6 +151,28 @@
             color: #888;
             font-size: 0.85rem;
         }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            main {
+                padding: 1rem;
+            }
+            
+            .footer-links a {
+                margin: 0 0.5rem;
+                font-size: 0.85rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -159,6 +193,12 @@
                     <span class="user-name">{{ user.username }}</span>
                     <a href="{% url 'accounts:logout' %}">Logout</a>
                 </div>
+            {% else %}
+                <div class="nav-links">
+                    <a href="{% url 'store:product_list' %}">Home</a>
+                    <a href="{% url 'accounts:login' %}">Login</a>
+                    <a href="{% url 'accounts:register' %}">Register</a>
+                </div>
             {% endif %}
         </nav>
     </header>
@@ -177,18 +217,18 @@
     </main>
     
     <footer>
-    <div class="footer-content">
-        <div class="footer-links">
-            <a href="{% url 'store:product_list' %}">Home</a>
-            <a href="{% url 'store:about' %}">About</a>
-            <a href="{% url 'store:contact' %}">Contact</a>
-            <a href="{% url 'store:privacy' %}">Privacy</a>
-            <a href="{% url 'store:terms' %}">Terms</a>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="{% url 'store:product_list' %}">Home</a>
+                <a href="{% url 'store:about' %}">About</a>
+                <a href="{% url 'store:contact' %}">Contact</a>
+                <a href="{% url 'store:privacy' %}">Privacy</a>
+                <a href="{% url 'store:terms' %}">Terms</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 My Store. All rights reserved.</p>
+            </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 My Store. </p>
-        </div>
-    </div>
-</footer>
+    </footer>
 </body>
 </html>

@@ -1,0 +1,225 @@
+{% extends "store/base.html" %}
+
+
+{% block content %}
+<style>
+    .reviews-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .reviews-header {
+        margin-bottom: 30px;
+    }
+
+    .reviews-header h2 {
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .rating-summary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .rating-summary-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .rating-info h3 {
+        font-size: 48px;
+        margin: 0;
+        font-weight: bold;
+    }
+
+    .rating-info .stars {
+        font-size: 24px;
+        margin: 5px 0;
+    }
+
+    .rating-info p {
+        margin: 5px 0;
+        opacity: 0.9;
+    }
+
+    .write-review-btn {
+        background: white;
+        color: #667eea;
+        padding: 12px 30px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .write-review-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        color: #667eea;
+    }
+
+    .reviews-list {
+        margin-top: 20px;
+    }
+
+    .review-card {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 25px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .review-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border-color: #d0d0d0;
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .reviewer-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin: 0;
+    }
+
+    .rating-badge {
+        background: #ffd700;
+        color: #333;
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .review-date {
+        color: #999;
+        font-size: 14px;
+        margin: 5px 0 15px 0;
+    }
+
+    .review-text {
+        color: #555;
+        line-height: 1.6;
+        margin: 15px 0;
+    }
+
+    .edit-btn {
+        background: #ff9800;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 14px;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .edit-btn:hover {
+        background: #f57c00;
+        color: white;
+    }
+
+    .no-reviews-alert {
+        background: #e3f2fd;
+        border: 1px solid #90caf9;
+        border-radius: 8px;
+        padding: 30px;
+        text-align: center;
+        color: #1976d2;
+    }
+
+    .no-reviews-alert h4 {
+        margin: 0 0 10px 0;
+        color: #1565c0;
+    }
+
+    @media (max-width: 768px) {
+        .rating-summary-content {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .review-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+
+<div class="reviews-container">
+    <div class="reviews-header">
+        <h2>Reviews for {{ product.name }}</h2>
+    </div>
+    
+    <div class="rating-summary">
+        <div class="rating-summary-content">
+            <div class="rating-info">
+                <h3>{{ avg_rating }}/5</h3>
+                <div class="stars">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= avg_rating %}
+                            ⭐
+                        {% else %}
+                            ☆
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <p>Based on {{ total_reviews }} review{{ total_reviews|pluralize }}</p>
+            </div>
+            {% if user.is_authenticated %}
+                <a href="{% url 'reviews:add_review' product.id %}" class="write-review-btn">✍️ Write a Review</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="reviews-list">
+        {% if reviews %}
+            {% for review in reviews %}
+            <div class="review-card">
+                <div class="review-header">
+                    <h5 class="reviewer-name">👤 {{ review.user.username }}</h5>
+                    <span class="rating-badge">{{ review.rating }} ⭐</span>
+                </div>
+                <p class="review-date">📅 {{ review.created_at|date:"F d, Y" }}</p>
+                
+                {% if review.review_text %}
+                    <p class="review-text">{{ review.review_text }}</p>
+                {% endif %}
+                
+                {% if review.user == user %}
+                    <a href="{% url 'reviews:add_review' product.id %}" class="edit-btn">Edit Review</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-reviews-alert">
+                <h4>📝 No reviews yet</h4>
+                <p>Be the first to review this product and help others make informed decisions!</p>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'reviews:add_review' product.id %}" class="write-review-btn" style="margin-top: 15px;">Write First Review</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
